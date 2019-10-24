@@ -230,6 +230,11 @@ func (kl *Kubelet) initialNode() (*v1.Node, error) {
 			Unschedulable: !kl.registerSchedulable,
 		},
 	}
+	if err := addOSSpecificLabels(node); err != nil {
+		return nil, err
+	}
+	fmt.Printf("%#v\n", node.Labels)
+
 	nodeTaints := make([]v1.Taint, 0)
 	if len(kl.registerWithTaints) > 0 {
 		taints := make([]v1.Taint, len(kl.registerWithTaints))
